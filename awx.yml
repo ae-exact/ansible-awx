@@ -1,0 +1,6 @@
+- name: awx
+  hosts: all
+  remote_user: root
+  
+  roles:
+    - { role: awx , tags: awx }

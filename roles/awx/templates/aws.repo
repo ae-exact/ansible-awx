@@ -1,0 +1,10 @@
+[mrmeee-awx]
+name=Copr repo for awx owned by mrmeee
+baseurl=https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/epel-7-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1

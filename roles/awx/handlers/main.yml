@@ -1,0 +1,55 @@
+---
+
+- name: restart rabbitmq
+  service: 
+    name: rabbitmq-server
+    state: restarted
+    enabled: yes
+
+- name: restart postgresql
+  service: 
+    name: rh-postgresql96-postgresql
+    state: restarted
+    enabled: yes 
+
+- name: restart memcached
+  service: 
+    name: rh_postgresql96
+    state: restarted
+    enabled: yes 
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: restart awx-cbreceiver
+  service:
+    name: awx-cbreceiver
+    state: restarted
+    enabled: yes
+
+- name: restart awx-dispatcher
+  service:
+    name: awx-dispatcher
+    state: restarted
+    enabled: yes
+
+- name: restart channels-worker
+  service:
+    name: awx-channels-worker
+    state: restarted
+    enabled: yes
+
+- name: restart awx-daphne
+  service:
+    name: awx-daphne
+    state: restarted
+    enabled: yes
+
+- name: restart awx-web
+  service:
+    name: awx-web
+    state: restarted
+    enabled: yes

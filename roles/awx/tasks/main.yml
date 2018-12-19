@@ -1,0 +1,157 @@
+# 系统更新
+- name: System Update
+  yum: 
+    name: "*"
+    state: latest
+
+# 安装 EPEL
+- name: Install EPEL
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Install PostgreSQL 9.6
+  yum:
+    name: centos-release-scl
+    state: latest
+
+# - name: Add AWX repo 
+#   shell: wget -O /etc/yum.repos.d/awx-rpm.repo https://copr.fedorainfracloud.org/coprs/mrmeee/awx/repo/epel-7/mrmeee-awx-epel-7.repo
+- name: Add AWX repo
+  get_url:
+    url: https://copr.fedorainfracloud.org/coprs/mrmeee/awx/repo/epel-7/mrmeee-awx-epel-7.repo
+    dest: /etc/yum.repos.d/awx-rpm.repo
+    mode: 0644
+
+
+- name: Add RabbitMQ repo
+  template:
+    src: rabbitmq-erlang.repo
+    dest: /etc/yum.repos.d/rabbitmq-erlang.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install rabbitMQ rpm
+  yum:
+    name: https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.5/rabbitmq-server-3.7.5-1.el7.noarch.rpm
+    state:  present
+    
+
+- name: Install postgresSQL and memcached
+  yum:
+    name: [rh-postgresql96 ,memcached ]
+    state: present
+
+
+- name: Install AWX
+  yum: 
+    name: awx
+    state: present
+  
+- name: initialize DB 
+  command: /opt/rh/rh-postgresql96/root/bin/postgresql-setup initdb
+#   args: 
+#     warn: false
+# notify: 
+#   - restart rabbitmq
+#   - restart postgresql
+
+- name: start postgres service
+  service:
+    name: rh-postgresql96-postgresql
+    state: started
+
+- name: enable postgres service
+  service:
+    name: rh-postgresql96-postgresql
+    enabled: yes
+
+- name: create the postgresql user for awx
+  command: scl enable rh-postgresql96 "su postgres -c \"createuser -S awx\""
+  
+
+- name: create the postgresql database for awx
+  command: scl enable rh-postgresql96 "su postgres -c \"createdb -O awx awx\""
+
+- name: restart rabbitmq
+  service: 
+    name: rabbitmq-server
+    state: started
+    enabled: yes
+
+
+# Configure AWX
+- name: Import Database Data
+  shell:
+    sudo -u awx /opt/awx/bin/awx-manage migrate
+
+- name: Initial configuration of AWX -1
+  shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'root@localhost', 'password')" | sudo -u awx /opt/awx/bin/awx-manage shell
+
+- name: Initial configuration of AWX -2
+  shell: 
+    sudo -u awx /opt/awx/bin/awx-manage create_preload_data
+- name: Initial configuration of AWX -3
+  shell:
+    sudo -u awx /opt/awx/bin/awx-manage provision_instance --hostname=$(hostname)
+- name: Initial configuration of AWX -4
+  shell: 
+    sudo -u awx /opt/awx/bin/awx-manage register_queue --queuename=tower --hostnames=$(hostname)
+
+
+- name: Install Nginx
+  yum: 
+    name: nginx
+    state: latest
+
+# - name: replace nginx.conf
+#   template:
+#     src: nginx.conf
+#     dest: /etc/nginx/nginx.conf
+#     owner: root
+#     group: root
+#     mode: 0644
+
+- name: replace nginx configuration file
+  shell: wget -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/MrMEEE/awx-build/master/nginx.conf
+  notify:
+    - restart nginx
+
+- name: restart nginx
+  service: 
+   name: nginx
+   state: started
+   enabled: yes
+
+- name: restart awx-cbreceiver
+  service: 
+   name: awx-cbreceiver
+   state: started
+   enabled: yes
+
+- name: restart awx-dispatcher
+  service: 
+   name: awx-dispatcher
+   state: started
+   enabled: yes
+
+- name: restart awx-channels-worker
+  service: 
+   name: awx-channels-worker
+   state: started
+   enabled: yes
+
+- name: restart awx-daphne
+  service: 
+   name: awx-daphne
+   state: started
+   enabled: yes
+
+- name: restart awx-web
+  service: 
+   name: awx-web
+   state: started
+   enabled: yes
+
+
