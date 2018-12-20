@@ -51,11 +51,6 @@
   
 - name: initialize DB 
   command: /opt/rh/rh-postgresql96/root/bin/postgresql-setup initdb
-#   args: 
-#     warn: false
-# notify: 
-#   - restart rabbitmq
-#   - restart postgresql
 
 - name: start postgres service
   service:
@@ -70,7 +65,6 @@
 - name: create the postgresql user for awx
   command: scl enable rh-postgresql96 "su postgres -c \"createuser -S awx\""
   
-
 - name: create the postgresql database for awx
   command: scl enable rh-postgresql96 "su postgres -c \"createdb -O awx awx\""
 
@@ -105,18 +99,10 @@
     name: nginx
     state: latest
 
-# - name: replace nginx.conf
-#   template:
-#     src: nginx.conf
-#     dest: /etc/nginx/nginx.conf
-#     owner: root
-#     group: root
-#     mode: 0644
-
-- name: replace nginx configuration file
-  shell: wget -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/MrMEEE/awx-build/master/nginx.conf
-  notify:
-    - restart nginx
+- name: replace nginx.conf
+  copy:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
 
 - name: restart nginx
   service: 
