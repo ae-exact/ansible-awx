@@ -7,7 +7,7 @@
 # 安装 EPEL
 - name: Install EPEL
   yum:
-    name: epel-release
+    name: [epel-release ,sshpass]
     state: latest
 
 - name: Install PostgreSQL 9.6
