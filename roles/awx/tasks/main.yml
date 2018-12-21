@@ -81,7 +81,7 @@
     sudo -u awx /opt/awx/bin/awx-manage migrate
 
 - name: Initial configuration of AWX -1
-  shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'root@localhost', 'password')" | sudo -u awx /opt/awx/bin/awx-manage shell
+  shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'root@localhost', 'admin')" | sudo -u awx /opt/awx/bin/awx-manage shell
 
 - name: Initial configuration of AWX -2
   shell: 
