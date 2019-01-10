@@ -93,6 +93,14 @@
   shell: 
     sudo -u awx /opt/awx/bin/awx-manage register_queue --queuename=tower --hostnames=$(hostname)
 
+# Install nginx
+- name: Add nginx repository
+  template:
+    src: nginx.repo
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Install Nginx
   yum: 
