@@ -1,6 +1,8 @@
 - name: awx
   hosts: all
-  remote_user: root
+  become: yes
+  become_method: sudo
+  remote_user: '{{admin_username}}'
   
   roles:
     - { role: awx , tags: awx }

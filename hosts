@@ -1,2 +1,2 @@
 [servers]
-139.159.192.106    ansible_ssh_user=root  ansible_ssh_pass=Qwer1234  ansible_ssh_port=22
+23.99.142.20    ansible_ssh_user=websoft9  ansible_ssh_pass=$jprUj1bWv&D9SbjQR!7HdV%hhTfW8Qg ansible_sudo_pass=$jprUj1bWv&D9SbjQR!7HdV%hhTfW8Qg
