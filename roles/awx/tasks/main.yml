@@ -71,7 +71,7 @@
     shell: cat /credentials/password.txt | awk 'NR==2' |awk -F ":" '{print $2}'
     register: postgresql_password
 
-  - debug: var=postgresql_password.stdout
+  # - debug: var=postgresql_password.stdout
 
   - name: create databases for awx
     postgresql_db:
