@@ -116,6 +116,13 @@
     shell: 
       sudo -u awx /opt/awx/bin/awx-manage register_queue --queuename=tower --hostnames=$(hostname)
 
+
+  - name: check hostname
+    shell: |
+      echo "sudo -u awx /opt/awx/bin/awx-manage provision_instance --hostname=$(hostname)" >> /etc/rc.local
+      echo "sudo -u awx /opt/awx/bin/awx-manage register_queue --queuename=tower --hostnames=$(hostname)" >> /etc/rc.local
+
+
   # Install nginx
 
 

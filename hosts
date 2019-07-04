@@ -1,11 +1,4 @@
-[local]
-localhost
+[server]
+40.114.67.238 ansible_ssh_user={{admin_username}}  ansible_ssh_pass=Qwer12345678 ansible_sudo_pass=Qwer12345678
 
-[server] # 非root用户名
-localhost ansible_ssh_user={{admin_username}} ansible_ssh_port=2222 ansible_ssh_private_key_file=/home/ubuntu/private_key
-
-# ansible_ssh_user
-# ansible_ssh_pass
-# ansible_sudo_pass
-# ansible_ssh_private_key_file
 
