@@ -1,0 +1,105 @@
+---
+
+- name: Install the repository RPM
+  yum_repository:
+    name: PostgreSQL{{postgresql_ver}}
+    description: PostgreSQL {{postgresql_ver}}
+    file: postgresql{{postgresql_ver}}
+    baseurl: https://download.postgresql.org/pub/repos/yum/{{postgresql_ver}}/redhat/rhel-$releasever-$basearch
+    gpgkey: https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-{{postgresql_tag}}
+    gpgcheck: yes
+    enabled: yes
+
+- name: Install PostgreSQL{{ postgresql_ver }}
+  yum: 
+    name: ["postgresql{{postgresql_tag}}","postgresql{{postgresql_tag}}-server",python-psycopg2]
+    state: latest
+
+- name: Create Databases Directory
+  file:
+    path: /data/pgsql
+    state: directory
+    owner: postgres
+    group: postgres
+
+- name: Change postgresql databases directory
+  lineinfile:
+      dest: /lib/systemd/system/postgresql-{{ postgresql_ver }}.service
+      regexp: 'Environment=PGDATA=/var/lib/pgsql/{{ postgresql_ver }}/data/'
+      line: "Environment=PGDATA=/data/pgsql"
+      state: present
+
+
+- name: Get postgresql Version
+  command: psql -V
+  register: psql_version
+  
+
+- name: initialize databases(9.x)
+  command: /usr/pgsql-{{ postgresql_ver }}/bin/postgresql{{postgresql_tag}}-setup initdb 
+  when: (psql_version.stdout.find('9.4') != -1) or (psql_version.stdout.find('9.5') != -1)or (psql_version.stdout.find('9.6') != -1)
+
+- name: initialize databases(10.x)
+  command: /usr/pgsql-{{ postgresql_ver }}/bin/postgresql-{{postgresql_tag}}-setup initdb    
+  when: (psql_version.stdout.find('10') != -1) or (psql_version.stdout.find('11') != -1)
+
+
+- name: Change postgresql databases METHOD
+  lineinfile:
+      dest: /data/pgsql/pg_hba.conf
+      regexp: 'host    all             all             127.0.0.1/32            ident'
+      line: "host    all             all             127.0.0.1/32            md5"
+      state: present
+
+
+- name: Start PostgreSQL{{ postgresql_ver }} Service
+  service: name=postgresql-{{ postgresql_ver }} state=started enabled=yes
+
+- name: Change postgresql password
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: postgres
+    password: '{{postgresql_password}}'
+
+- name: Create credentials Folder
+  file:
+    path: /credentials
+    state: directory
+
+- name: Create Password doc
+  file:
+    path: /credentials/password.txt
+    mode: 644
+    state: touch
+
+
+- name: Write Databases Password
+  shell: echo -e 'postgresql username:postgres\npostgresql password:'{{postgresql_password}}  > /credentials/password.txt
+
+- name: Databases Random Password
+  template: 
+    src: init.py
+    dest: /root/init.py
+    mode: 0750
+
+- name: Setting Startup
+  lineinfile:
+    path: /etc/rc.d/rc.local
+    regexp: '/root/init.py'
+    line: '/root/init.py'
+    mode: 0750
+
+- name: enable remote access 1
+  copy:
+    src: postgresql.conf
+    dest: /data/pgsql
+  when: remote
+
+- name: enable remote access 2
+  copy:
+    src: pg_hba.conf
+    dest: /data/pgsql
+  when: remote
+  notify: restart postgresql
+

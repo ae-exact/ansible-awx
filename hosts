@@ -1,2 +1,11 @@
-[servers]
-23.99.142.20    ansible_ssh_user=websoft9  ansible_ssh_pass=$jprUj1bWv&D9SbjQR!7HdV%hhTfW8Qg ansible_sudo_pass=$jprUj1bWv&D9SbjQR!7HdV%hhTfW8Qg
+[local]
+localhost
+
+[server] # 非root用户名
+localhost ansible_ssh_user={{admin_username}} ansible_ssh_port=2222 ansible_ssh_private_key_file=/home/ubuntu/private_key
+
+# ansible_ssh_user
+# ansible_ssh_pass
+# ansible_sudo_pass
+# ansible_ssh_private_key_file
+

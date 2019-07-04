@@ -5,69 +5,91 @@
       name: "*"
       state: latest
 
+  - name: Add AWX repository
+    yum_repository:
+      name: AWX
+      description: Copr repo for awx owned by mrmeee
+      baseurl: https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/epel-{{ansible_distribution_version}}-$basearch/
+      gpgcheck: yes
+      gpgkey: https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/pubkey.gpg
+      enabled: yes
+      skip_if_unavailable: yes
+      repo_gpgcheck: no
+
+  - name: Add Erlang repository
+    yum_repository:
+      name: erlang-solutions
+      description: Centos $releasever - $basearch - Erlang Solutions
+      baseurl: http://packages.erlang-solutions.com/rpm/centos/$releasever/$basearch
+      gpgcheck: yes
+      gpgkey: http://packages.erlang-solutions.com/debian/erlang_solutions.asc
+      enabled: yes
+
+  - name: Add rabbitMQ repository
+    yum_repository:
+      name: rabbitMQ
+      description: rabbitMQ repository
+      baseurl: https://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/{{ansible_distribution_version}}/
+      gpgcheck: yes
+      gpgkey: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+      enabled: yes
+
+  - name: Add Nginx repository
+    yum_repository:
+      name: Nginx
+      description: nginx repo
+      baseurl: http://nginx.org/packages/centos/{{ansible_distribution_version}}/$basearch/
+      gpgcheck: no
+      enabled: yes
+
+
   # 安装 EPEL
   - name: Install EPEL
     yum:
       name: [epel-release ,sshpass]
       state: latest
 
-  - name: Install PostgreSQL 9.6
+  - name: Install Erlang
     yum:
-      name: centos-release-scl
-      state: latest
-
-  # - name: Add AWX repo 
-  #   shell: wget -O /etc/yum.repos.d/awx-rpm.repo https://copr.fedorainfracloud.org/coprs/mrmeee/awx/repo/epel-7/mrmeee-awx-epel-7.repo
-  - name: Add AWX repo
-    get_url:
-      url: https://copr.fedorainfracloud.org/coprs/mrmeee/awx/repo/epel-7/mrmeee-awx-epel-7.repo
-      dest: /etc/yum.repos.d/awx-rpm.repo
-      mode: 0644
-
-
-  - name: Add RabbitMQ repo
-    template:
-      src: rabbitmq-erlang.repo
-      dest: /etc/yum.repos.d/rabbitmq-erlang.repo
-      owner: root
-      group: root
-      mode: 0644
+      name: erlang
 
   - name: Install rabbitMQ rpm
     yum:
-      name: https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.5/rabbitmq-server-3.7.5-1.el7.noarch.rpm
-      state:  present
-      
+      name: rabbitmq-server
 
-  - name: Install postgresSQL and memcached
+  - name: Install  memcached
     yum:
-      name: [rh-postgresql96 ,memcached ]
+      name: [memcached]
       state: present
-
 
   - name: Install AWX
     yum: 
       name: awx
       state: present
-    
-  - name: initialize DB 
-    command: /opt/rh/rh-postgresql96/root/bin/postgresql-setup initdb
 
-  - name: start postgres service
-    service:
-      name: rh-postgresql96-postgresql
-      state: started
+  - name: Get postgresql Password
+    shell: cat /credentials/password.txt | awk 'NR==2' |awk -F ":" '{print $2}'
+    register: postgresql_password
 
-  - name: enable postgres service
-    service:
-      name: rh-postgresql96-postgresql
-      enabled: yes
+  - debug: var=postgresql_password.stdout
+
+  - name: create databases for awx
+    postgresql_db:
+      login_host: 127.0.0.1
+      login_user: postgres
+      login_password: "{{postgresql_password.stdout}}"
+      name: awx
 
   - name: create the postgresql user for awx
-    command: scl enable rh-postgresql96 "su postgres -c \"createuser -S awx\""
-    
-  - name: create the postgresql database for awx
-    command: scl enable rh-postgresql96 "su postgres -c \"createdb -O awx awx\""
+    postgresql_user:
+      login_host: 127.0.0.1
+      login_user: postgres
+      login_password: "{{postgresql_password.stdout}}"
+      name: awx
+      db: awx
+      role_attr_flags: SUPERUSER
+      
+
 
   - name: restart rabbitmq
     service: 
@@ -95,13 +117,7 @@
       sudo -u awx /opt/awx/bin/awx-manage register_queue --queuename=tower --hostnames=$(hostname)
 
   # Install nginx
-  - name: Add nginx repository
-    template:
-      src: nginx.repo
-      dest: /etc/yum.repos.d/nginx.repo
-      owner: root
-      group: root
-      mode: 0644
+
 
   - name: Install Nginx
     yum: 

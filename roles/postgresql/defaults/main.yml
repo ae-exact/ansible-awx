@@ -1,0 +1,4 @@
+postgresql_ver: 9.6   # 默认版本  9.4 9.5 9.6 10 11
+postgresql_tag: 96     # 与版本号一致,不需要小数点
+postgresql_password: 123456 # mysql 默认密码
+remote: no
