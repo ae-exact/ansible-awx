@@ -1,4 +1,0 @@
-[server]
-40.114.67.238 ansible_ssh_user={{admin_username}}  ansible_ssh_pass=Qwer12345678 ansible_sudo_pass=Qwer12345678
-
-
