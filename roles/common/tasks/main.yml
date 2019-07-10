@@ -1,5 +1,5 @@
 ---
-- name: apt updata
+- name: apt update
   shell: apt update
 
 - name: System Upgrade
