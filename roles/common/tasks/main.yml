@@ -1,6 +1,10 @@
 ---
+- name: apt updata
+  shell: apt update
+
 - name: System Upgrade
   yum: name=* state=latest
+  force_apt_get: True
 
 - name: Install EPEL
   yum: name=epel-release state=installed
