@@ -1,15 +1,15 @@
 - block:
   # 系统更新
-  - name: System Update
-    yum: 
-      name: "*"
-      state: latest
+  # - name: System Update
+  #   yum: 
+  #     name: "*"
+  #     state: latest
 
   - name: Add AWX repository
     yum_repository:
       name: AWX
       description: Copr repo for awx owned by mrmeee
-      baseurl: https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/epel-{{ansible_distribution_version}}-$basearch/
+      baseurl: https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/epel-{{ansible_distribution_major_version}}-$basearch/
       gpgcheck: yes
       gpgkey: https://copr-be.cloud.fedoraproject.org/results/mrmeee/awx/pubkey.gpg
       enabled: yes
@@ -29,7 +29,7 @@
     yum_repository:
       name: rabbitMQ
       description: rabbitMQ repository
-      baseurl: https://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/{{ansible_distribution_version}}/
+      baseurl: https://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/{{ansible_distribution_major_version}}/
       gpgcheck: yes
       gpgkey: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
       enabled: yes
@@ -38,7 +38,7 @@
     yum_repository:
       name: Nginx
       description: nginx repo
-      baseurl: http://nginx.org/packages/centos/{{ansible_distribution_version}}/$basearch/
+      baseurl: http://nginx.org/packages/centos/{{ansible_distribution_major_version}}/$basearch/
       gpgcheck: no
       enabled: yes
 

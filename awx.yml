@@ -5,6 +5,6 @@
   remote_user: '{{admin_username}}'
   
   roles:
-    - { role: common , tags: common }
-    - { role: postgresql , tags: postgresql }
+    # - { role: common , tags: common }
+    # - { role: postgresql , tags: postgresql }
     - { role: awx , tags: awx }
