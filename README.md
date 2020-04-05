@@ -1,67 +1,66 @@
-# AWX 自动化安装与部署
+# AWX automated installation and deployment
 
-本项目是由 [Websoft9](http://www.websoft9.com) 研发的 [AWX](https://github.com/ansible/awx) 自动化安装程序，开发语言是 Ansible。使用本项目，只需要用户在 Linux 上运行一条命令，即可自动化安装 AWX，让原本复杂的安装过程变得没有任何技术门槛。  
+Description for Ansible Tower Community Edition[AWX](https://github.com/ansible/awx) automated installer development of language is Ansible. Using this project, users only need to run a command on Linux to automatically install AWX, making the original complicated installation process without any technical threshold. 
 
 ![](https://libs.websoft9.com/Websoft9/DocsPicture/en/awx/awxui-websoft9.png)
 
-本项目是开源项目，采用 LGPL3.0 开源协议。
+This project is an open source project, using LGPL3.0 open source agreement.
 
-## 配置要求
+## Configuration requirements
 
-安装本项目，确保符合如下的条件：
+Install this project to ensure that the following conditions are met:
 
-| 条件       | 详情       | 备注  |
+| condition       | Details       | Note  |
 | ------------ | ------------ | ----- |
-| 操作系统       | CentOS7.x, Ubuntu18.04, Amazon Linux2       |    |
-| 公有云| AWS, Azure, 阿里云, 华为云, 腾讯云 |  |
-| 私有云|  KVM, VMware, VirtualBox, OpenStack |  |
-| 服务器配置 | 最低1核1G，安装时所需的带宽不低于10M |  建议采用按量100M带宽 |
+| operating system       | RHEL 7.x, CentOS7.x, Ubuntu18.04      |    |
+| Virtualization|  KVM, VMware, VirtualBox, OpenStack |  |
+| server configuration | Minimum 1 core 1G, bandwidth required for installation is not less than 10M |  100M bandwidth is recommended|
 
-## 组件
+## Component
 
-包含的核心组件为：AWX, Docker, Node.jS等
+The core components included are: AWX, Docker, Node.jS, etc.
 
-更多请见[参数表](/docs/zh/stack-components.md)
+For more information, please see [Parameter Table] (/docs/zh/stack-components.md)
 
-## 本项目安装的是 AWX 最新版吗？
+## Is the latest version of AWX installed in this project?
 
-本项目采用官方提供 Docker 安装方式，官方定期发布最新的Docker镜像，部署此项目即为 AWX 官方发布的最新稳定版。
+This project uses the official Docker installation method. The official regularly releases the latest Docker image. Deploying this project is the latest stable version officially released by AWX.
 
-我们会定期测试本项目，以保证用户可以顺利安装。  
+We will regularly test this project to ensure that users can install it smoothly.  
 
-AWX 的最新版本号[查看地址](https://github.com/ansible/awx/releases)
+The latest version number of AWX [View Address] (https://github.com/ansible/awx/releases)
 
-## 安装指南
+## Installation Guide
 
-登录 Linux，运行下面的**命令脚本**即可启动自动化部署，然后耐心等待，直至安装成功。
+Log in to Linux and run the following ** command script ** to start the automated deployment, and then wait patiently until the installation is successful.
 
 ```
-#非 root 用户登录后，需先提升成为 root 权限
-sudo su -
+#After logging in as a non-root user, you need to be elevated to root first
+sudo su-
 
-#自动化安装命令
+#Automated installation commands
 wget -N https://raw.githubusercontent.com/Websoft9/ansible-linux/master/scripts/install.sh; bash install.sh -r awx
 
 ```
 
-**安装中的注意事项：**   
+** Notes during installation: **   
 
-1. 操作不慎或网络发生变化，可能会导致SSH连接被中断，安装就会失败，此时请重新安装
-2. 安装缓慢、停滞不前或无故中断，主要是网络不通（或网速太慢）导致的下载问题，此时请重新安装
+1. Inadvertent operation or changes in the network may cause the SSH connection to be interrupted and the installation will fail. Please reinstall at this time
+2. The installation is slow, stagnant or unreasonably interrupted, mainly due to the download problem caused by the network failure (or the network speed is too slow), please reinstall at this time
 
-多种原因导致无法顺利安装，请使用我们在公有云上发布的 [AWX 镜像](https://apps.websoft9.com/awx) 的部署方式
+There are many reasons why it cannot be installed smoothly, please use the deployment method of [AWX image] (https://apps.websoft9.com/awx) that we released on the public cloud
 
 
-## 文档
+## Documentation
 
-文档链接：https://support.websoft9.com/docs/awx/zh
+Documentation link: https://support.websoft9.com/docs/awx/zh
 
 ## FAQ
 
-- 命令脚本部署与镜像部署有什么区别？请参考[镜像部署-vs-脚本部署](https://support.websoft9.com/docs/faq/zh/bz-product.html#镜像部署-vs-脚本部署)
-- 本项目支持在 Ansible Tower 上运行吗？支持
+-What is the difference between command script deployment and image deployment? Please refer to [image deployment-vs-script deployment] (https://support.websoft9.com/docs/faq/zh/bz-product.html#image deployment-vs-script deployment)
+-Does this project support running on Ansible Tower? stand by
 
 ## To do
 
-* 应用和数据库的随机密码
-* 支持 Amazon Linux 上部署
+* Random passwords for applications and databases
+* Supports deployment on Amazon Linux
