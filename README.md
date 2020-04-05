@@ -65,6 +65,8 @@ To learn more about using AWX, and Tower, view the [Tower docs site](http://docs
 
 The AWX Project Frequently Asked Questions can be found [here](https://www.ansible.com/awx-project-faq).
 
+To learn more about using “High Availability” AWX Ansible, view the [Sean Shuping aka /dev/zero](https://devzero.co.za/2019/02/28/high-availability-awx-ansible/).
+
 ## FAQ
 
 -What is the difference between command script deployment and image deployment? Please refer to [image deployment-vs-script deployment] (https://support.websoft9.com/docs/faq/bz-product.html#image deployment-vs-script deployment)
