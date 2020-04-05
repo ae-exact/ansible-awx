@@ -1,6 +1,10 @@
-# AWX automated installation and deployment
+<img src="https://raw.githubusercontent.com/ansible/awx-logos/master/awx/ui/client/assets/logo-login.svg?sanitize=true" width=200 alt="AWX" />
 
-Description for Ansible Tower Community Edition[AWX](https://github.com/ansible/awx) automated installer development of language is Ansible. Using this project, users only need to run a command on Linux to automatically install AWX, making the original complicated installation process without any technical threshold. 
+Ansible Tower Community Edition [AWX](https://github.com/ansible/awx) provides a web-based user interface, REST API, and task engine built on top of [Ansible](https://github.com/ansible/ansible). It is the upstream project for [Tower](https://www.ansible.com/tower), a commercial derivative of AWX. 
+
+# AWX automated installation and deployment
+ 
+Adjustments done comparion with original autors to adopt it for in house implementations (&home labs). Newer version of products added as well extra details for recommended configurations such as external DB and HA install.
 
 ![](https://libs.websoft9.com/Websoft9/DocsPicture/en/awx/awxui-websoft9.png)
 
@@ -20,7 +24,7 @@ Install this project to ensure that the following conditions are met:
 
 The core components included are: AWX, Docker, Node.jS, etc.
 
-For more information, please see [Parameter Table] (/docs/zh/stack-components.md)
+For more information, please see [Parameter Table] (/docs/stack-components.md)
 
 ## Is the latest version of AWX installed in this project?
 
@@ -53,14 +57,26 @@ There are many reasons why it cannot be installed smoothly, please use the deplo
 
 ## Documentation
 
-Documentation link: https://support.websoft9.com/docs/awx/zh
+Documentation link: https://support.websoft9.com/docs/awx/ 
+Unix Arena AWX articles: https://www.unixarena.com/2019/03/backup-restore-ansible-awx-tower-cli.html/
+To install AWX, please view the [Install guide](./INSTALL.md).
+
+To learn more about using AWX, and Tower, view the [Tower docs site](http://docs.ansible.com/ansible-tower/index.html).
+
+The AWX Project Frequently Asked Questions can be found [here](https://www.ansible.com/awx-project-faq).
 
 ## FAQ
 
--What is the difference between command script deployment and image deployment? Please refer to [image deployment-vs-script deployment] (https://support.websoft9.com/docs/faq/zh/bz-product.html#image deployment-vs-script deployment)
+-What is the difference between command script deployment and image deployment? Please refer to [image deployment-vs-script deployment] (https://support.websoft9.com/docs/faq/bz-product.html#image deployment-vs-script deployment)
 -Does this project support running on Ansible Tower? stand by
 
 ## To do
 
 * Random passwords for applications and databases
-* Supports deployment on Amazon Linux
+* Supports deployment for OEL
+* Deployment for HA install
+* Cleanup
+* DB migration and restore
+* External DB
+* Prometheous Monitoring integration
+* Openshift / K8s installation
