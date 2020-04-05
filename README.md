@@ -59,7 +59,7 @@ There are many reasons why it cannot be installed smoothly, please use the deplo
 
 Documentation link: https://support.websoft9.com/docs/awx/ .
 To install AWX, please view the [Install guide](./docs/INSTALL.md).
-To update,backup and restore AWX, please view the [Main guide](./docs/UPDATE.md).
+To update,backup and restore AWX, please view the [UPDATE guide](./docs/UPDATE.md).
 
 Unix Arena AWX articles: https://www.unixarena.com/2019/03/backup-restore-ansible-awx-tower-cli.html/ .
 
